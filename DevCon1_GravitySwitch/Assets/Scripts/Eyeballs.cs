@@ -19,7 +19,8 @@ public class Eyeballs : MonoBehaviour
 
     // Reference to the player
     private GameObject player;
-
+    public bool isFlipped;
+    public int flipflop = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -42,20 +43,49 @@ public class Eyeballs : MonoBehaviour
         mouseDirection.x *= mouseSensitivity * smoothing;
         mouseDirection.y *= mouseSensitivity * smoothing;
 
+
         // Linear interpolation between two positions. Moving between where the mouse is currently looking as well as the calculations done above
         smoothMovement.x = Mathf.Lerp(smoothMovement.x, mouseDirection.x, 1f / smoothing);
         smoothMovement.y = Mathf.Lerp(smoothMovement.y, mouseDirection.y, 1f / smoothing);
+
+
 
         // Add these calculations together
         mouseLook += smoothMovement;
 
         // Restrict the mouse position to make sure the player cannot rotate forever on the x-axis
-        mouseLook.y = Mathf.Clamp(mouseLook.y, -80f, 90f);
+        mouseLook.y = Mathf.Clamp(mouseLook.y, -50f, 40f);
 
         // Move the camera to the newest calculated position.
         transform.localRotation = Quaternion.AngleAxis(-mouseLook.y, Vector3.right);
-
+        transform.localPosition = new Vector3(transform.localPosition.x, 1f + mouseLook.y / -40, transform.localPosition.z);
         // Move the player object on the x-axis only
-        player.transform.rotation = Quaternion.AngleAxis(mouseLook.x, player.transform.up);
+        Quaternion rotation = player.transform.rotation;
+        Quaternion rotation3 = Quaternion.AngleAxis(180, player.transform.forward);
+        
+        // i dont want to talk about it but it works
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            isFlipped = !isFlipped;
+            if (isFlipped)
+            {
+                flipflop = 180;
+            }
+            else
+            {
+
+                flipflop = 0;
+            }
+            player.GetComponent<GravityFlip>().isFlipped = isFlipped;
+        }
+        player.transform.rotation = Quaternion.Euler(0f, mouseLook.x, flipflop);
+           
+        //player.transform.rotation = rotation2;
+
+
+
+
     }
+
+
 }

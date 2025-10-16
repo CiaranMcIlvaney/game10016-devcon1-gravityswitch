@@ -25,7 +25,7 @@ public class CharacterMove : MonoBehaviour
     public float jumpHeight = 7f;
     public bool isGrounded;
     public LayerMask groundLayer;
-
+    Vector3 groundDirection = Vector3.down;
     // Start is called before the first frame update
     void Start()
     {
@@ -73,7 +73,7 @@ public class CharacterMove : MonoBehaviour
         {
             // Adding upward force of to the rigidbody on the y axis times the jumpHeight (1 * 7 = 7)
             // ForceMode.Impulse means the frame that it was just called on, meaining right away instead of skipping a frame
-            rb.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
+            rb.AddForce(-groundDirection * jumpHeight, ForceMode.Impulse);
         }
     }
     
@@ -85,7 +85,17 @@ public class CharacterMove : MonoBehaviour
 
         // The parameters for this if statement is the starting point of the ray, then the direction of the ray, where to store the results,
         // length, then the layer to check
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, 2f, groundLayer))
+        
+        if (this.GetComponent<GravityFlip>().isFlipped)
+        {
+            groundDirection = Vector3.up;
+        }
+        else
+        {
+            groundDirection = Vector3.down;
+        }
+
+        if (Physics.Raycast(transform.position, groundDirection, out hit, 2f, groundLayer))
         {
             // If all criteria is met then return true
             return true;
