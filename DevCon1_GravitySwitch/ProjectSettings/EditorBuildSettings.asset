@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/GravityFlipDemo.unity
+    guid: 0e299f6afbfc44e4aa454d4639f37e7b
   m_configObjects: {}
